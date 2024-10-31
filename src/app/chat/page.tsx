@@ -10,7 +10,7 @@ const Chat = () => {
 
   const lengthInput = () => {
     const newInput = input.split("");
-    for (let i = 0; i < newInput.length; i++) {
+    for (let i = 0; i <= newInput.length; i++) {
       return newInput.length;
     }
   };
