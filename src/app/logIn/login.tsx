@@ -5,6 +5,7 @@ interface ILogin {
   type: string;
   label?: string;
   placeholder?: string;
+  value?: string;
   onChange?: (e: any) => void;
   ref?: any;
 }
@@ -13,6 +14,7 @@ const Login: React.FC<ILogin> = ({
   type,
   label,
   placeholder,
+  value,
   onChange,
   ref,
 }) => {
@@ -23,6 +25,7 @@ const Login: React.FC<ILogin> = ({
         <input
           ref={ref}
           type={type}
+          value={value}
           placeholder={placeholder}
           onChange={onChange}
           className="p-2 mt-2 rounded-lg"

@@ -4,10 +4,17 @@ import Image from "../../../node_modules/next/image";
 import React, { useState, useRef, useEffect, act } from "react";
 import { PiEyeClosedLight } from "react-icons/pi";
 import { PiEyeLight } from "react-icons/pi";
+import { callAPI } from "@/config/axios";
 
 const HomeSignUp = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [type, setType] = useState("password");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const name = firstName + " " + lastName;
+
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -21,6 +28,20 @@ const HomeSignUp = () => {
     icon = <PiEyeClosedLight />;
     activeType = "password";
   }
+
+  const onSignUp = async () => {
+    try {
+      // lengkapi fungsi ini hingga bisa menambah data ke file db.json
+      const res = await callAPI.post("/users", {
+        name: { name },
+        email: { email },
+        password: { password },
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //   if (passwordRef.current) {
   //     console.log("Ref from password INPUT :", passwordRef.current.value);
@@ -37,6 +58,9 @@ const HomeSignUp = () => {
               label="First Name"
               type="text"
               placeholder="Type your first name"
+              onChange={(e: any) => {
+                setFirstName(e.target.value);
+              }}
             />
           </div>
           <div className="w-[48%]">
@@ -44,11 +68,28 @@ const HomeSignUp = () => {
               label="Last Name"
               type="text"
               placeholder="Type your last name"
+              onChange={(e: any) => {
+                setLastName(e.target.value);
+              }}
             />
           </div>
         </div>
-        <SignUp label="Email" type="text" placeholder="Type your email" />
-        <SignUp label="Phone" type="text" placeholder="+62" />
+        <SignUp
+          label="Email"
+          type="text"
+          placeholder="Type your email"
+          onChange={(e: any) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <SignUp
+          label="Phone"
+          type="text"
+          placeholder="+62"
+          onChange={(e: any) => {
+            setLastName(e.target.value);
+          }}
+        />
         <div className="relative">
           <SignUp
             ref={passwordRef}
@@ -86,7 +127,11 @@ const HomeSignUp = () => {
             <input type="checkbox" className="mr-4" />
             <label htmlFor="">I am also to receive message and emails.</label>
           </div>
-          <button className="bg-black text-white w-[30%] p-4 mt-4">
+          <button
+            type="button"
+            onClick={onSignUp}
+            className="bg-black text-white w-[30%] p-4 mt-4"
+          >
             Submit
           </button>
         </div>
