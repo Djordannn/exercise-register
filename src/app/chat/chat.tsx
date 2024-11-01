@@ -1,8 +1,30 @@
 "use client";
 import React from "react";
 
-const InputChat = () => {
-  return <div></div>;
+interface IChat {
+  type: string;
+  label?: string;
+  onChange?: () => void;
+}
+
+const InputChat: React.FC<IChat> = ({ type, label, onChange }) => {
+  return (
+    <div>
+      <div className="bg-[#eeee]">
+        <label htmlFor="">{label}</label>
+        <input
+          type={type}
+          onChange={onChange}
+          className="border-2 border-black w-full h-[50px]"
+        />
+        <input
+          type={type}
+          onChange={onChange}
+          className="border-2 border-black w-full h-[100px]"
+        />
+      </div>
+    </div>
+  );
 };
 
 export default InputChat;

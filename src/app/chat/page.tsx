@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { callAPI } from "@/config/axios";
+import { text } from "stream/consumers";
+import InputChat from "./chat";
 // import axios from "axios";
 
 const Chat = () => {
@@ -74,13 +76,7 @@ const Chat = () => {
               />
             </div>
             <div className="w-full">
-              <textarea
-                type="text"
-                className="bg-[#eeee] rounded-lg w-full p-2 h-[150px]"
-                onChange={(e: any) => {
-                  setInput(e.target.value);
-                }}
-              />
+              <InputChat />
               <div className="flex justify-between items-center">
                 <div>{lengthInput()}</div>
                 <button

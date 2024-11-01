@@ -29,6 +29,7 @@ const HomeSignUp = () => {
     activeType = "password";
   }
 
+  // define dispatch from useAppDispatch for execute function actions from redux
   const onSignUp = async () => {
     try {
       // lengkapi fungsi ini hingga bisa menambah data ke file db.json
@@ -38,6 +39,7 @@ const HomeSignUp = () => {
         password: { password },
       });
       console.log(res.data);
+      localStorage.setItem("dataUser", JSON.stringify(res.data[0]));
     } catch (error) {
       console.log(error);
     }

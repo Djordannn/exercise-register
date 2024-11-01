@@ -6,6 +6,8 @@ import React, { useState, useRef, useEffect, act } from "react";
 import { PiEyeClosedLight } from "react-icons/pi";
 import { PiEyeLight } from "react-icons/pi";
 import { callAPI } from "@/config/axios";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { setSignIn } from "@/lib/redux/features/userSlice";
 
 const HomeLogin = () => {
   const [type, setType] = useState("password");
@@ -13,7 +15,9 @@ const HomeLogin = () => {
   // Get data email & password
   const [password, setPassword] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
+  // console.log(email);
 
+  const dispatch = useAppDispatch();
   const onSignIn = async () => {
     try {
       const response = await callAPI.get(
@@ -21,6 +25,7 @@ const HomeLogin = () => {
       );
       localStorage.setItem("dataUser", JSON.stringify(response.data[0]));
       console.log(response.data);
+      dispatch(setSignIn(response.data[0])); // store data to global store redux
     } catch (error) {
       console.log(error);
     }
