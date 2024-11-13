@@ -1,8 +1,4 @@
-import {
-  useDispatch,
-  useSelector,
-  useStore,
-} from "../../../node_modules/react-redux/dist/react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 
 import type { AppStore, RootState, AppDispatch } from "./store";
 

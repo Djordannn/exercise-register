@@ -1,149 +1,111 @@
 "use client";
-import SignUp from "./signup";
-import Image from "../../../node_modules/next/image";
-import React, { useState, useRef, useEffect, act } from "react";
-import { PiEyeClosedLight } from "react-icons/pi";
-import { PiEyeLight } from "react-icons/pi";
+
+import FormInput from "@/components/formInput/index";
+import React, { useState, useRef, useEffect } from "react";
 import { callAPI } from "@/config/axios";
+import { Formik, Form, FormikProps } from "formik";
+import { SignUpSchema } from "./signUpSchema";
+import { validateYupSchema } from "../../../node_modules/formik/dist/Formik";
+interface ISignInPageProps {}
 
-const HomeSignUp = () => {
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const [type, setType] = useState("password");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const name = firstName + " " + lastName;
+interface ISignUpValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  reqPassword: string;
+}
 
-  const [password, setPassword] = useState("");
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  if (type === "password");
-  let icon;
-  let activeType;
-  if (isVisible) {
-    icon = <PiEyeLight />;
-    activeType = "text";
-  } else {
-    icon = <PiEyeClosedLight />;
-    activeType = "password";
-  }
-
-  // define dispatch from useAppDispatch for execute function actions from redux
-  const onSignUp = async () => {
+const SignUp: React.FC<ISignInPageProps> = (props) => {
+  const onSignUp = async (formValue: ISignUpValues) => {
     try {
-      // lengkapi fungsi ini hingga bisa menambah data ke file db.json
       const res = await callAPI.post("/users", {
-        name: { name },
-        email: { email },
-        password: { password },
+        name: `${formValue.firstName} ${formValue.lastName}`,
+        email: formValue.email,
+        password: formValue.password,
       });
       console.log(res.data);
-      localStorage.setItem("dataUser", JSON.stringify(res.data[0]));
     } catch (error) {
       console.log(error);
     }
   };
 
-  //   if (passwordRef.current) {
-  //     console.log("Ref from password INPUT :", passwordRef.current.value);
-  //   }
-
   return (
-    <div className="flex items-center h-[800px] bg-[url('../image/mountain.jpg')] bg-no-repeat bg-cover">
-      <div className="w-[50%]">{/* <h1>Hello</h1> */}</div>
-      <div className="w-[50%] mx-auto bg-[#eeee] rounded-tl-[5%] rounded-bl-[5%] text-[#2d2d2d] mt-1 flex flex-col gap-4 p-20">
-        <h2 className="text-3xl mb-2">Register now</h2>
-        <div className="flex gap-4">
-          <div className="w-[48%]">
-            <SignUp
-              label="First Name"
-              type="text"
-              placeholder="Type your first name"
-              onChange={(e: any) => {
-                setFirstName(e.target.value);
-              }}
-            />
-          </div>
-          <div className="w-[48%]">
-            <SignUp
-              label="Last Name"
-              type="text"
-              placeholder="Type your last name"
-              onChange={(e: any) => {
-                setLastName(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <SignUp
-          label="Email"
-          type="text"
-          placeholder="Type your email"
-          onChange={(e: any) => {
-            setEmail(e.target.value);
-          }}
-        />
-        <SignUp
-          label="Phone"
-          type="text"
-          placeholder="+62"
-          onChange={(e: any) => {
-            setLastName(e.target.value);
-          }}
-        />
-        <div className="relative">
-          <SignUp
-            ref={passwordRef}
-            type={activeType}
-            label="Password"
-            placeholder="Type your password"
-            onChange={(e: any) => {
-              setPassword(e.target.value);
+    <div className="px-[8%] py-24 bg-slate-400 h-[90vh] flex items-center justify-center text-white">
+      <div className="w-[40%] p-6 bg-slate-800 mx-auto">
+        <h1 className="py-4 text-3xl">SignUp</h1>
+        <div className="flex flex-col gap-4">
+          <Formik
+            validationSchema={SignUpSchema}
+            initialValues={{
+              firstName: "",
+              lastName: "",
+              email: "",
+              password: "",
+              reqPassword: "",
             }}
-          />
-          <button
-            type="button"
-            className="absolute right-3 bottom-1 text-3xl cursor-pointer"
-            onClick={() => setIsVisible(!isVisible)}
+            onSubmit={(values, { resetForm }) => {
+              console.log("Value from input formik :", values);
+              onSignUp(values);
+              resetForm();
+            }}
           >
-            {icon}
-          </button>
+            {(props: FormikProps<ISignUpValues>) => {
+              const { values, handleChange, errors, touched } = props;
+              return (
+                <Form>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex gap-4">
+                      <FormInput
+                        id="firstName"
+                        type="text"
+                        label="First name"
+                        onChange={handleChange}
+                        value={values.firstName}
+                      />
+                      <FormInput
+                        id="lastName"
+                        type="text"
+                        label="Last name"
+                        onChange={handleChange}
+                        value={values.lastName}
+                      />
+                    </div>
+                    <FormInput
+                      id="email"
+                      type="text"
+                      label="Email"
+                      onChange={handleChange}
+                      value={values.email}
+                    />
+                    <FormInput
+                      id="password"
+                      type="password"
+                      label="Password"
+                      onChange={handleChange}
+                      value={values.password}
+                    />
+                    <FormInput
+                      id="reqPassword"
+                      type="password"
+                      label="Confirmation Password"
+                      onChange={handleChange}
+                      value={values.reqPassword}
+                    />
+                    <div className="mt-4">
+                      <button type="submit" className="bg-slate-400 py-1 px-4">
+                        SignUp
+                      </button>
+                    </div>
+                  </div>
+                </Form>
+              );
+            }}
+          </Formik>
         </div>
-        <div>
-          <div className="">
-            <input type="checkbox" className="mr-4" />
-            <label htmlFor="">
-              I agree to our{" "}
-              <a href="#" className="font-semibold">
-                Terms of use
-              </a>
-              {"  "}
-              and{" "}
-              <a href="#" className="font-semibold">
-                Privacy policy
-              </a>{" "}
-            </label>
-          </div>
-          <div>
-            <input type="checkbox" className="mr-4" />
-            <label htmlFor="">I am also to receive message and emails.</label>
-          </div>
-          <button
-            type="button"
-            onClick={onSignUp}
-            className="bg-black text-white w-[30%] p-4 mt-4"
-          >
-            Submit
-          </button>
-        </div>
-
-        <p className="pt-4 text-center">
-          Already have an account? <a href="/logIn">login</a>
-        </p>
       </div>
     </div>
   );
 };
 
-export default HomeSignUp;
+export default SignUp;

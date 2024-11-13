@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Children,
-  createContext,
-  FunctionComponent,
-  ReactNode,
-  useState,
-} from "react";
+import { createContext, FC, ReactNode, useState } from "react";
 
 // context config
 interface ILangaugeContexts {
@@ -24,9 +18,7 @@ interface ILanguageProvider {
   children: ReactNode;
 }
 
-const LanguageProvider: FunctionComponent<ILanguageProvider> = ({
-  children,
-}) => {
+const LanguageProvider: FC<ILanguageProvider> = ({ children }) => {
   const [language, setLanguage] = useState<string>("en");
   return (
     <LanguageContexts.Provider value={{ language, setLanguage }}>

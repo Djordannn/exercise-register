@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 interface IUser {
   id: string;
+  name: string;
   username: string;
   email: string;
-  name: string;
+  isAuth?: boolean;
 }
 
 const initialData: IUser = {

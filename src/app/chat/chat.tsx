@@ -12,15 +12,10 @@ const InputChat: React.FC<IChat> = ({ type, label, onChange }) => {
     <div>
       <div className="bg-[#eeee]">
         <label htmlFor="">{label}</label>
-        <input
+        <textarea
           type={type}
           onChange={onChange}
-          className="border-2 border-black w-full h-[50px]"
-        />
-        <input
-          type={type}
-          onChange={onChange}
-          className="border-2 border-black w-full h-[100px]"
+          className="border-2 border-black w-full p-3 h-[100px]"
         />
       </div>
     </div>

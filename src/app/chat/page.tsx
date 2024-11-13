@@ -76,7 +76,12 @@ const Chat = () => {
               />
             </div>
             <div className="w-full">
-              <InputChat />
+              <InputChat
+                type="text"
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+              />
               <div className="flex justify-between items-center">
                 <div>{lengthInput()}</div>
                 <button
